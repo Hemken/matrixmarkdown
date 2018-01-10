@@ -1,0 +1,44 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="table.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+</head>
+<h1><a href="#matrices-as-markdown-tables" id="matrices-as-markdown-tables">Matrices as Markdown Tables</a></h1>
+<p>In addition to using commands like <code>tabulate</code>, <code>estimates table</code>, etc. to produce native Markdown tables (without code-fenced monospace), it is easy to write a function that will display <strong><em>any</em></strong> matrix as a Markdown table.</p>
+<p>First, we will run an estimation command, which produces (at least) two matrices, <code>e(b)</code> and <code>e(V)</code>.</p>
+<pre><code>. clear all
+
+. sysuse auto
+(1978 Automobile Data)
+
+. quietly regress mpg price weight i.foreign
+
+</code></pre>
+<p>Now we can display the coefficient and precision matrices (no code fences).</p>
+<p>. mata:  matrixmarkdown(&ldquo;e(b)&rdquo;)</p>
+<table>
+<thead>
+<tr><th> price </th><th>weight </th><th>0b.foreign </th><th>1.foreign </th><th>_cons </th></tr>
+</thead>
+<tbody>
+<tr><td> .0000566</td><td> -.0067758</td><td> 0</td><td> -1.855891</td><td> 41.95948 </td></tr>
+</tbody>
+</table>
+<p>. mata:  matrixmarkdown(&ldquo;e(V)&rdquo;)</p>
+<table>
+<thead>
+<tr><th> price </th><th>weight </th><th>0b.foreign </th><th>1.foreign </th><th>_cons </th></tr>
+</thead>
+<tbody>
+<tr><td> 3.70e-08</td><td> -1.23e-07</td><td> 0</td><td> -.0001344</td><td> .0001827 </td></tr>
+<tr><td> -1.23e-07</td><td> 8.19e-07</td><td> 0</td><td> .000858</td><td> -.0019706 </td></tr>
+<tr><td> 0</td><td> 0</td><td> 0</td><td> 0</td><td> 0 </td></tr>
+<tr><td> -.0001344</td><td> .000858</td><td> 0</td><td> 1.661683</td><td> -2.256137 </td></tr>
+<tr><td> .0001827</td><td> -.0019706</td><td> 0</td><td> -2.256137</td><td> 5.65358 </td></tr>
+</tbody>
+</table>
+<p>The table&rsquo;s style is modified by a stylesheet (a bit of HTML code). For tables of numbers, it helps to have something &ndash; extra padding or cell borders &ndash; to separate the table cells visually.</p>

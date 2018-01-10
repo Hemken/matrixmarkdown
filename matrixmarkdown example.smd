@@ -1,0 +1,31 @@
+<<dd_include: header.html>>
+
+# Matrices as Markdown Tables
+
+In addition to using commands like `tabulate`, `estimates table`, etc.
+to produce native Markdown tables (without code-fenced monospace), it
+is easy to write a function that will display ***any*** matrix as
+a Markdown table.
+
+First, we will run an estimation command, which produces (at least)
+two matrices, `e(b)` and `e(V)`.
+
+```
+<<dd_do>>
+clear all
+sysuse auto
+quietly regress mpg price weight i.foreign
+<</dd_do>>
+```
+
+Now we can display the coefficient and precision matrices
+(no code fences).
+
+<<dd_do>>
+mata:  matrixmarkdown("e(b)")
+mata:  matrixmarkdown("e(V)")
+<</dd_do>>
+
+The table's style is modified by a stylesheet (a bit of HTML code).
+For tables of numbers, it helps to have something -- extra padding
+or cell borders -- to separate the table cells visually.
