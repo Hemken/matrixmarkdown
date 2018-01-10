@@ -7,8 +7,18 @@
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
 </script>
 </head>
-<h1><a href="#matrices-as-markdown-tables" id="matrices-as-markdown-tables">Matrices as Markdown Tables</a></h1>
-<p>In addition to using commands like <code>tabulate</code>, <code>estimates table</code>, etc. to produce native Markdown tables (without code-fenced monospace), it is easy to write a function that will display <strong><em>any</em></strong> matrix as a Markdown table.</p>
+<h1><a href="#html-tables-from-matrices-and-datasets-using-" id="html-tables-from-matrices-and-datasets-using-">HTML Tables from Matrices and Datasets using <code>dyndoc</code></a></h1>
+<p>One benefit of using <code>dyndoc</code> versus <code>markstat</code> is that <code>dyndoc</code> has the capacity to produce native HTML tables.</p>
+<p>In addition to using Stata commands like</p>
+<ul>
+<li><code>tabulate</code></li>
+<li><code>estimates table</code></li>
+<li><code>_coef_table</code></li>
+<li><code>tabstat</code></li>
+</ul>
+<p>to produce native Markdown tables (without code-fenced monospace), it is easy to write functions that will display <strong><em>any</em></strong> matrix  or dataset as a Markdown table.</p>
+<p>The source for basic versions of these functions can be found on <a href="https://github.com/Hemken/matrixmarkdown">github</a>. Run the code in <em>matrixmarkdown.mata</em> and <em>datamarkdown.mata</em> and you should be ready to use these functions.</p>
+<h2><a href="#matrices-as-markdown-tables" id="matrices-as-markdown-tables">Matrices as Markdown Tables</a></h2>
 <p>First, we will run an estimation command, which produces (at least) two matrices, <code>e(b)</code> and <code>e(V)</code>.</p>
 <pre><code>. clear all
 
@@ -41,4 +51,52 @@
 <tr><td> .0001827</td><td> -.0019706</td><td> 0</td><td> -2.256137</td><td> 5.65358 </td></tr>
 </tbody>
 </table>
-<p>The table&rsquo;s style is modified by a stylesheet (a bit of HTML code). For tables of numbers, it helps to have something &ndash; extra padding or cell borders &ndash; to separate the table cells visually.</p>
+<p>The <code>matrixmarkdown</code> function takes one argument, the name of a Stata matrix as a string.  Because we are starting from a Stata matrix (not a Mata matrix), the matrix elements are necessarily numeric values.</p>
+<p>The header for the table is taken from the column stripe of the Stata matrix (and in version 1 does not include the &ldquo;equation&rdquo; stripe).</p>
+<p>This table&rsquo;s style is modified by a stylesheet (a bit of HTML code). For tables of numbers, it helps to have something &ndash; extra padding or cell borders &ndash; to separate the table cells visually.</p>
+<h2><a href="#datasets-as-markdown-tables" id="datasets-as-markdown-tables">Datasets as Markdown Tables</a></h2>
+<p>It is equally simple to put the elements of a Stata dataset into a markdown table.</p>
+<p>The first example tables all observations of three variables, where &ldquo;foreign&rdquo; is not 0.</p>
+<p>. mata:  datamarkdown(.,&ldquo;price mpg foreign&rdquo;, &ldquo;foreign&rdquo;)</p>
+<table>
+<thead>
+<tr><th> price </th><th>mpg </th><th>foreign </th></tr>
+</thead>
+<tbody>
+<tr><td> 9690</td><td> 17</td><td> 1 </td></tr>
+<tr><td> 6295</td><td> 23</td><td> 1 </td></tr>
+<tr><td> 9735</td><td> 25</td><td> 1 </td></tr>
+<tr><td> 6229</td><td> 23</td><td> 1 </td></tr>
+<tr><td> 4589</td><td> 35</td><td> 1 </td></tr>
+<tr><td> 5079</td><td> 24</td><td> 1 </td></tr>
+<tr><td> 8129</td><td> 21</td><td> 1 </td></tr>
+<tr><td> 4296</td><td> 21</td><td> 1 </td></tr>
+<tr><td> 5799</td><td> 25</td><td> 1 </td></tr>
+<tr><td> 4499</td><td> 28</td><td> 1 </td></tr>
+<tr><td> 3995</td><td> 30</td><td> 1 </td></tr>
+<tr><td> 12990</td><td> 14</td><td> 1 </td></tr>
+<tr><td> 3895</td><td> 26</td><td> 1 </td></tr>
+<tr><td> 3798</td><td> 35</td><td> 1 </td></tr>
+<tr><td> 5899</td><td> 18</td><td> 1 </td></tr>
+<tr><td> 3748</td><td> 31</td><td> 1 </td></tr>
+<tr><td> 5719</td><td> 18</td><td> 1 </td></tr>
+<tr><td> 7140</td><td> 23</td><td> 1 </td></tr>
+<tr><td> 5397</td><td> 41</td><td> 1 </td></tr>
+<tr><td> 4697</td><td> 25</td><td> 1 </td></tr>
+<tr><td> 6850</td><td> 25</td><td> 1 </td></tr>
+<tr><td> 11995</td><td> 17</td><td> 1 </td></tr>
+</tbody>
+</table>
+<p>. mata:  datamarkdown((1\5), (2,3,4))</p>
+<table>
+<thead>
+<tr><th> price </th><th>mpg </th><th>rep78 </th></tr>
+</thead>
+<tbody>
+<tr><td> 4099</td><td> 22</td><td> 3 </td></tr>
+<tr><td> 7827</td><td> 15</td><td> 4 </td></tr>
+</tbody>
+</table>
+<p>The <code>datamarkdown</code> function takes 2 or 3 arguments, the same arguments that the Mata function <code>st_data</code> accepts.</p>
+<p>The first argument defines which observations to use.  The second argument defines which variables to use.  The optional third argument specifies a data set variable used to filter the observations.  See <code>st_data</code> for details (caveat, in version 1 not all possibilities are implemented).</p>
+<p>The header for the table is taken from the variable names in the dataset.</p>

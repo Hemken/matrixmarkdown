@@ -3,6 +3,7 @@
 
 *  add rownames option
 *  add equation names option
+*  allow a user-defined header
 mata :
 void function matrixmarkdown(string scalar matrixname) {
 	A = st_matrix(matrixname)

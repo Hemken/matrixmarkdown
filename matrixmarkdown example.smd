@@ -1,11 +1,27 @@
 <<dd_include: header.html>>
 
-# Matrices as Markdown Tables
+# HTML Tables from Matrices and Datasets using `dyndoc`
 
-In addition to using commands like `tabulate`, `estimates table`, etc.
+One benefit of using `dyndoc` versus `markstat` is that `dyndoc` has the 
+capacity to produce native HTML tables.
+
+In addition to using Stata commands like 
+
+- `tabulate`
+- `estimates table`
+- `_coef_table`
+- `tabstat`
+
 to produce native Markdown tables (without code-fenced monospace), it
-is easy to write a function that will display ***any*** matrix as
-a Markdown table.
+is easy to write functions that will display ***any*** matrix  or
+dataset as a Markdown table.
+
+The source for basic versions of these functions can be found on 
+[github](https://github.com/Hemken/matrixmarkdown).
+Run the code in *matrixmarkdown.mata* and *datamarkdown.mata* and you should
+be ready to use these functions.
+
+## Matrices as Markdown Tables
 
 First, we will run an estimation command, which produces (at least)
 two matrices, `e(b)` and `e(V)`.
@@ -26,6 +42,39 @@ mata:  matrixmarkdown("e(b)")
 mata:  matrixmarkdown("e(V)")
 <</dd_do>>
 
-The table's style is modified by a stylesheet (a bit of HTML code).
+The `matrixmarkdown` function takes one argument, the name of a Stata 
+matrix as a string.  Because we are starting from a Stata matrix
+(not a Mata matrix), the matrix elements are necessarily numeric
+values.
+
+The header for the table is taken from the column stripe of the
+Stata matrix (and in version 1 does not include the "equation"
+stripe).
+
+This table's style is modified by a stylesheet (a bit of HTML code).
 For tables of numbers, it helps to have something -- extra padding
 or cell borders -- to separate the table cells visually.
+
+## Datasets as Markdown Tables
+It is equally simple to put the elements of a Stata dataset
+into a markdown table.
+
+The first example tables all observations of three variables, where
+"foreign" is not 0.
+
+<<dd_do>>
+mata:  datamarkdown(.,"price mpg foreign", "foreign")
+mata:  datamarkdown((1\5), (2,3,4))
+<</dd_do>>
+
+The `datamarkdown` function takes 2 or 3 arguments, the same arguments
+that the Mata function `st_data` accepts.
+
+The first argument defines which observations to use.  The second
+argument defines which variables to use.  The optional third argument
+specifies a data set variable used to filter the observations.  See
+`st_data` for details (caveat, in version 1 not all possibilities are
+implemented).
+
+The header for the table is taken from the variable names in the 
+dataset.

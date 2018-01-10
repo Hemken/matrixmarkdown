@@ -1,6 +1,10 @@
 *! version 1.0, 10 January 2018
 *! Doug Hemken
 
+* variable labels as headers
+* user-defined headers
+* string data, st_sdata()
+
 mata :
 void function datamarkdown(real matrix obs, rowvector vars, | scalar select) {
 	A = st_data(obs, vars, select)
@@ -12,6 +16,7 @@ void function datamarkdown(real matrix obs, rowvector vars, | scalar select) {
 	if (cols(vars)==1 &	missing(vars)==1) vars = 1..st_nvar()
 	H = st_varname(vars)
 	
+	printf("\n")
 	header = "| "
 	for(j=1;j<=cols(H);j++) {
 		header = header + sprintf("%s |", H[1,j])
