@@ -1,0 +1,27 @@
+<<dd_include: header.html>>
+
+# Matrices to Markdown to HTML
+
+Set up
+
+```
+<<dd_do>>
+quietly sem (price <- mpg)(mpg <- weight)
+matrix SEM = e(b)'
+matrix SEMV = e(V)
+<</dd_do>>
+```
+
+With row stripes (equation and variable names).
+
+<<dd_do>>
+mata: matrixmarkdown("SEM")
+mata: matrixmarkdown("SEMV")
+<</dd_do>>
+
+Without.
+
+<<dd_do>>
+mata: matrixmarkdown("SEM", 0) // no rowstripe
+mata: matrixmarkdown("SEMV", 0)
+<</dd_do>>

@@ -1,0 +1,78 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="table.css">
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+</script>
+</head>
+<h1><a href="#matrices-to-markdown-to-html" id="matrices-to-markdown-to-html">Matrices to Markdown to HTML</a></h1>
+<p>Set up</p>
+<pre><code>. quietly sem (price &lt;- mpg)(mpg &lt;- weight)
+
+. matrix SEM = e(b)'
+
+. matrix SEMV = e(V)
+
+</code></pre>
+<p>With row stripes (equation and variable names).</p>
+<p>. mata: matrixmarkdown(&ldquo;SEM&rdquo;)</p>
+<table>
+<thead>
+<tr><th> equation</th><th> variable</th><th> y1 </th></tr>
+</thead>
+<tbody>
+<tr><td> price</td><td> mpg</td><td> -238.8943 </td></tr>
+<tr><td> price</td><td> _cons</td><td> 11253.06 </td></tr>
+<tr><td> mpg</td><td> weight</td><td> -.0060087 </td></tr>
+<tr><td> mpg</td><td> _cons</td><td> 39.44028 </td></tr>
+<tr><td> /</td><td> var(e.price)</td><td> 6697512 </td></tr>
+<tr><td> /</td><td> var(e.mpg)</td><td> 11.50634 </td></tr>
+</tbody>
+</table>
+<p>. mata: matrixmarkdown(&ldquo;SEMV&rdquo;)</p>
+<table>
+<thead>
+<tr><th colspan="2"></th><th> price </th><th>price </th><th>mpg </th><th>mpg </th><th>/ </th><th>/ </th></tr>
+<tr><th> equation</th><th> variable</th><th> mpg </th><th>_cons </th><th>weight </th><th>_cons </th><th>var(e.price) </th><th>var(e.mpg) </th></tr>
+</thead>
+<tbody>
+<tr><td> price</td><td> mpg</td><td> 2740.996</td><td> -58375.81</td><td> 9.27e-18</td><td> -2.80e-14</td><td> 2.21e-08</td><td> -1.70e-14 </td></tr>
+<tr><td> price</td><td> _cons</td><td> -58375.81</td><td> 1333754</td><td> -1.78e-16</td><td> 5.24e-13</td><td> -6.25e-07</td><td> 3.62e-13 </td></tr>
+<tr><td> mpg</td><td> weight</td><td> 9.27e-18</td><td> -1.78e-16</td><td> 2.61e-07</td><td> -.0007879</td><td> 6.86e-14</td><td> -3.46e-19 </td></tr>
+<tr><td> mpg</td><td> _cons</td><td> -2.80e-14</td><td> 5.24e-13</td><td> -.0007879</td><td> 2.5346</td><td> -2.07e-10</td><td> -5.98e-17 </td></tr>
+<tr><td> /</td><td> var(e.price)</td><td> 2.21e-08</td><td> -6.25e-07</td><td> 6.86e-14</td><td> -2.07e-10</td><td> 1.21e+12</td><td> -2.30e-10 </td></tr>
+<tr><td> /</td><td> var(e.mpg)</td><td> -1.70e-14</td><td> 3.62e-13</td><td> -3.46e-19</td><td> -5.98e-17</td><td> -2.30e-10</td><td> 3.578267 </td></tr>
+</tbody>
+</table>
+<p>Without.</p>
+<p>. mata: matrixmarkdown(&ldquo;SEM&rdquo;, 0) // no rowstripe</p>
+<table>
+<thead>
+<tr><th> y1 </th></tr>
+</thead>
+<tbody>
+<tr><td> -238.8943 </td></tr>
+<tr><td> 11253.06 </td></tr>
+<tr><td> -.0060087 </td></tr>
+<tr><td> 39.44028 </td></tr>
+<tr><td> 6697512 </td></tr>
+<tr><td> 11.50634 </td></tr>
+</tbody>
+</table>
+<p>. mata: matrixmarkdown(&ldquo;SEMV&rdquo;, 0)</p>
+<table>
+<thead>
+<tr><th> price </th><th>price </th><th>mpg </th><th>mpg </th><th>/ </th><th>/ </th></tr>
+<tr><th> mpg </th><th>_cons </th><th>weight </th><th>_cons </th><th>var(e.price) </th><th>var(e.mpg) </th></tr>
+</thead>
+<tbody>
+<tr><td> 2740.996</td><td> -58375.81</td><td> 9.27e-18</td><td> -2.80e-14</td><td> 2.21e-08</td><td> -1.70e-14 </td></tr>
+<tr><td> -58375.81</td><td> 1333754</td><td> -1.78e-16</td><td> 5.24e-13</td><td> -6.25e-07</td><td> 3.62e-13 </td></tr>
+<tr><td> 9.27e-18</td><td> -1.78e-16</td><td> 2.61e-07</td><td> -.0007879</td><td> 6.86e-14</td><td> -3.46e-19 </td></tr>
+<tr><td> -2.80e-14</td><td> 5.24e-13</td><td> -.0007879</td><td> 2.5346</td><td> -2.07e-10</td><td> -5.98e-17 </td></tr>
+<tr><td> 2.21e-08</td><td> -6.25e-07</td><td> 6.86e-14</td><td> -2.07e-10</td><td> 1.21e+12</td><td> -2.30e-10 </td></tr>
+<tr><td> -1.70e-14</td><td> 3.62e-13</td><td> -3.46e-19</td><td> -5.98e-17</td><td> -2.30e-10</td><td> 3.578267 </td></tr>
+</tbody>
+</table>

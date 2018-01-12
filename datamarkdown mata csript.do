@@ -25,6 +25,15 @@ assert _rc == 3598
 
 clear
 sysuse auto
+collapse (count) obs=price (mean) mean=price ///
+	(sd) sd=price (min) min=price (max) max=price, by(foreign)
+decode foreign, generate(source)
+	
+mata:  datamarkdown(.,.,.,"source")
+	
+	
+clear
+sysuse auto
 mata: datamarkdown(.,.)
 mata: datamarkdown(1,.)     // obs 1
 mata: datamarkdown(1,2)
@@ -36,3 +45,5 @@ mata: datamarkdown((1,5),2..4) // obs 1 thru 5
 mata: datamarkdown((1,3\7,9),"price mpg")
 
 mata: datamarkdown(.,"price mpg foreign", "foreign")
+
+mata: datamarkdown(.,"price mpg foreign", "foreign", "make")
